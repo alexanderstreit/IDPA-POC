@@ -1,53 +1,43 @@
 #!/usr/bin/env python3
 
 from sense_hat import SenseHat
-import time
+import time    
+import csv
 
 sense = SenseHat()
 sense.clear()
+sense.set_imu_config(True, True, True)
+
+with open('data.csv', mode='w') as file:
+        writer = csv.writer(file, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        writer.writerow(['Temperatur', 'Druck', 'Luftfeuchtigkeit', 'Orientierung (Degrees)', 'Kompass (Norden)', 'Beschl. X', 'Beschl. Y', 'Beschl. Z', 'Temperatur (Feuchtigkeit)', 'Druck 2', 'Luftfeuchtigkeit 2', 'Temparatur (Druck)'])
 
 # Farben definieren
 red = (255, 0, 0)
 green = (0, 255, 0)
 blue = (0, 0, 255)
 
-while False:
-	acceleration = sense.get_accelerometer_raw()
-	x = acceleration['x']
-	y = acceleration['y']
-	z = acceleration['z']
-
-	x = abs(x)
-	y = abs(y)
-	z = abs(z)
-
-	if x > 2 or y > 2 or z > 2:
-		sense.show_letter("!", red)
-	else:
-		sense.clear()
-
-#print()
-#print("Luftfeuchtigkeit:")
-#humidity = sense.get_humidity()
-#print(humidity)
-
+def writeToCsv(temp, press, hum, pos_deg, pos_comp, acc_x, acc_y, acc_z, temp2, press2, humm2, temp3):
+    with open('data.csv', mode='a') as file:
+        writer = csv.writer(file, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        writer.writerow([temp, press, hum, pos_deg, pos_comp, acc_x, acc_y, acc_z, temp2, press2, humm2, temp3])
+    print('csv geschrieben')
+        
 while True:
-	print()
-	print("Temperatur:")
-	temp = sense.get_temperature()
-	print(temp)
+    temp = sense.get_temperature()
+    press = sense.get_pressure()
+    hum = sense.get_humidity()
+    acceleration = sense.get_accelerometer_raw()
+    acc_x = acceleration['x']
+    acc_y = acceleration['y']
+    acc_z = acceleration['z']
+    
+    pos_deg = sense.get_orientation_degrees()
+    temp2 = sense.get_temperature_from_humidity()
+    temp3 = sense.get_temperature_from_pressure()
+    press2 = 0
+    humm2 = 0
+    
+    comp = sense.compass
+    writeToCsv(temp, press, hum, pos_deg, comp, acc_x, acc_y, acc_z, temp2, press2, humm2, temp3)
 
-	print()
-	print("Druck:")
-	pressure = sense.get_pressure()
-	print(pressure)
-
-	print()
-	print("Luftfeuchtigkeit:")
-	humidity = sense.get_humidity()
-	print(humidity)
-
-	sense.set_rotation(180)
-	sense.show_message("%.1f degree" % temp, scroll_speed=0.01, text_colour=blue)
-	sense.show_message("%.1f ke ahnig" % pressure, scroll_speed=0.01, text_colour=green)
-	sense.show_message("%.1f percent" % humidity, scroll_speed=0.01, text_colour=red)
