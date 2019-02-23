@@ -8,7 +8,7 @@ import datetime
 sense = SenseHat()
 sense.clear()
 sense.set_imu_config(True, True, True)
-counter = 0
+sense.low_light = True
 
 with open('data.csv', mode='w') as file:
     writer = csv.writer(file, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
@@ -17,6 +17,10 @@ with open('data.csv', mode='w') as file:
 with open('acc.csv', mode='w') as file:
     writer = csv.writer(file, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     writer.writerow(['Zeit','Acc_X','Acc_Y','Acc_Z'])
+
+with open('log.csv', mode='w') as file:
+    writer = csv.writer(file, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    writer.writerow(['Zeit','Fehler'])
 
 # Farben definieren
 red = (255, 0, 0)
@@ -27,17 +31,20 @@ def writeDataToCsv(temperature, temperature2, temperature3, pressure, humidty, y
     with open('data.csv', mode='a') as file:
         writer = csv.writer(file, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         writer.writerow([datetime.datetime.now(),temperature, temperature2, temperature3, pressure, humidty, yaw, pitch, roll, mag_x, mag_y, mag_z, gyro_x, gyro_y, gyro_z])
-    print('data geschrieben')
-    
+        
 def writeAccelerationToCsv(x,y,z):
     with open('acc.csv', mode='a') as file:
         writer = csv.writer(file, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         writer.writerow([datetime.datetime.now(),x,y,z])
-    print('acc geschrieben')
+        sense.set_pixel(0, 0, green)
+        time.sleep(.05)
+        sense.set_pixel(0, 0, black)
     
-def main():
+def main():  
+    sense.set_pixel(0, 0, black)
+    counter = 0
     try:
-        while False:
+        while True:
             #Region Acceleration
             acceleration = sense.get_accelerometer_raw()
             acc_x = acceleration['x']
@@ -78,6 +85,7 @@ def main():
         with open('log.csv', mode='a') as file:
             writer = csv.writer(file, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             writer.writerow([datetime.datetime.now(),str(e)])
+            sense.set_pixel(1, 0, red)
     finally:
         pass
         main()
