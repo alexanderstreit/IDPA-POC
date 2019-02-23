@@ -1,1 +1,1 @@
-Zeit;Temperatur;Druck;Luftfeuchtigkeit;Orientierung (Degrees);Kompass (Norden);Beschl. X;Beschl. Y;Beschl. Z;Temperatur (Feuchtigkeit);Druck 2;Luftfeuchtigkeit 2;Temparatur (Druck)
+Zeit;Temperatur1;Temperatur2;Temperatur3;Luftdruck;Luftfeuchtigkeit;Yaw;Pitch;Roll;Compass X;Compass Y;Compass Z;Gyro X;Gyro Y;Gyro Z
