@@ -7,8 +7,8 @@ import datetime
 
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
-BLACK = (0,0,0)
 BLUE = (0, 0, 255)
+BLACK = (0,0,0)
 
 class DataLogger(object):
     
@@ -37,6 +37,12 @@ class DataLogger(object):
 
 
     def init_csv_files(self):
+        self.sense.set_pixel(0, 1, GREEN)
+        self.sense.set_pixel(0, 0, GREEN)
+        time.sleep(.1)
+        self.sense.set_pixel(0, 1, BLACK)
+        self.sense.set_pixel(0, 0, BLACK)
+    
         delimiter=';'
         quotechar='"'
         quoting=csv.QUOTE_MINIMAL
@@ -94,9 +100,9 @@ class DataLogger(object):
         data += self.get_mag()
         data += self.get_gyro()
         
-        self.sense.set_pixel(0, 2, BLUE)
+        self.sense.set_pixel(0, 1, BLUE)
         time.sleep(.05)
-        self.sense.set_pixel(0, 2, BLACK)
+        self.sense.set_pixel(0, 1, BLACK)
         
         self.data_list.append(data)
         if len(self.data_list) % 10 == 0:
