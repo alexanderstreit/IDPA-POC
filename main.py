@@ -49,17 +49,17 @@ class DataLogger(object):
         
         # see comment in init method
         data_headings = ['Zeit','Temperatur1', 'Temperatur2', 'Temperatur3', 'Luftdruck', 'Luftfeuchtigkeit', 'Yaw', 'Pitch', 'Roll', 'Compass X', 'Compass Y', 'Compass Z', 'Gyro X', 'Gyro Y', 'Gyro Z']
-        with open('data.csv', 'w') as file:
+        with open('data.csv', 'a') as file:
             writer = csv.writer(file, delimiter=delimiter, quotechar=quotechar, quoting=quoting)
             writer.writerow(data_headings)
 
         acc_headings = ['Zeit','Acc_X','Acc_Y','Acc_Z']
-        with open('acc.csv', 'w') as file:
+        with open('acc.csv', 'a') as file:
             writer = csv.writer(file, delimiter=delimiter, quotechar=quotechar, quoting=quoting)
             writer.writerow(acc_headings)
 
         log_headings = ['Zeit','Fehler']
-        with open('log.csv', 'w') as file:
+        with open('log.csv', 'a') as file:
             writer = csv.writer(file, delimiter=delimiter, quotechar=quotechar, quoting=quoting)
             writer.writerow(log_headings)
 

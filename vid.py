@@ -2,6 +2,7 @@ from picamera import PiCamera
 from sense_hat import SenseHat
 from time import sleep
 import time
+import datetime
 import csv
 
 BLUE = (0, 0, 255)
@@ -34,15 +35,13 @@ class VideoLogger(object):
                 writer.writerow(row)
         
     def start_filming(self):
-        counter = 1
         while True:
-            self.camera.start_recording('/home/pi/pi-strato-flight/videos/video' + str(counter) + '.h264')
+            self.camera.start_recording('/home/pi/pi-strato-flight/videos/video' + str(datetime.datetime.now()) + '.h264')
             self.sense.set_pixel(7, 7, GREEN)
             print('starting')
-            self.camera.wait_recording(60)
+            self.camera.wait_recording(600)
             self.camera.stop_recording()
             self.sense.set_pixel(7, 7, BLACK)
-            counter += 1
             
     def log_exception(self, exception):
         print(str(exception))
